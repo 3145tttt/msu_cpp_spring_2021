@@ -4,10 +4,10 @@
 
 
 void DefualtTest(){
-	Allocator myAllocator;
-	myAllocator.makeAllocator(100);
-	char* ptr = myAllocator.alloc(20);
-	assert(myAllocator.getOffset() == 20);
+    Allocator myAllocator;
+    myAllocator.makeAllocator(100);
+    char* ptr = myAllocator.alloc(20);
+    assert(myAllocator.getOffset() == 20);
 }
 
 void LimitTest(){
