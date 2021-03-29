@@ -1,9 +1,9 @@
 #include "allocator.hpp"
 
 void Allocator::makeAllocator(size_t maxSize){
-	if(ptr)
-		delete[] ptr;
-	offset = 0;
+    if(ptr)
+	delete[] ptr;
+    offset = 0;
     ptr = new char[maxSize];
     maxAllocSize = maxSize;
 }
@@ -21,10 +21,10 @@ void Allocator::reset(){
 }
 
 size_t Allocator::getOffset(){
-	//how make get-only property?
-	return offset;
+     //how make read-only property?
+     return offset;
 }
 
 Allocator::~Allocator(){
-	delete[] ptr;
+     delete[] ptr;
 }
