@@ -105,7 +105,6 @@ void spaceTest(){
 
 int main()
 {
-    
 	standartTest();
 	withoutCallbackTest1();
 	withoutCallbackTest2();
