@@ -1,7 +1,7 @@
 #pragma once
 
-#include<string>
-#include<functional>
+#include <string>
+#include <functional>
 
 class TokenParser
 {
@@ -10,9 +10,9 @@ private:
         return c == ' ' || c == '\t' || c == '\n';
     }
 
-    void tokenF(bool isDigit, std::string s) {
+    void tokenF(bool isDigit, std::string s, unsigned long long x) {
         if(isDigit && digitF)
-            digitF(s);
+            digitF(x);
         else if(stringF)
             stringF(s);
     }
@@ -21,7 +21,7 @@ private:
 
     std::function<void()> endF;
 
-    std::function<void(std::string)> digitF;
+    std::function<void(unsigned long long)> digitF;
 
     std::function<void(std::string)> stringF;
 
@@ -36,7 +36,7 @@ public:
         endF =  t;
     }
 
-    void SetDigitTokenCallback(std::function<void(std::string)> t = nullptr){
+    void SetDigitTokenCallback(std::function<void(unsigned long long)> t = nullptr){
         digitF =  t;
     }
 
