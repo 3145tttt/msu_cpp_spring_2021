@@ -60,7 +60,6 @@ std::string format(std::string source, Args&&... args) {
     size_t maxValue = 0;
 
     for(size_t i = 0; i < formatingValues.size(); ++i){
-        //std::cout << "s " << formatingValues[i].start << " e " << formatingValues[i].end << " v " << formatingValues[i].value << std::endl;
         if(maxValue < formatingValues[i].value)
             maxValue = formatingValues[i].value;
     }
