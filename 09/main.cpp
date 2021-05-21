@@ -11,7 +11,7 @@ void test(){
 
     std::ofstream out("input1.txt", std::ios::out);
 
-     srand(time(NULL));
+    srand(time(NULL));
     for(uint64_t i = 0; i < MAX; ++i){
         a[i] = rand() % 3000001;
         out << a[i] << ' ';
@@ -37,6 +37,5 @@ void test(){
 
 int main(){
     test();
-    //mergeFileSortThread("input1.txt", "output1.txt");
     return 0;
 }
