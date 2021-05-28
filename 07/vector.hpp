@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdlib.h>
 #include <iterator>
 #include <stddef.h>
@@ -18,7 +20,7 @@ private:
     bool have_val = false;
 
     void allocate(){
-        if(size_ <= capacity_)
+        if(size_ < capacity_)
             return;
         capacity_ = capacity_*2;
         ptr = (T*)realloc(ptr, sizeof(T)*capacity_);
@@ -29,18 +31,28 @@ public:
 
     class MyIterator: public std::iterator<std::input_iterator_tag, T, int64_t> {
         private:
-            size_t i = 0;
+            size_t i;
             T* p;
         public:
-            MyIterator(T* p) : p(p), i(0) {}
-            MyIterator(T* p, size_t i) : p(p), i(i) {}
+            MyIterator(T* ptr){
+                p = ptr;
+                i = 0;
+            }
+            MyIterator(T* ptr, size_t pos){
+                p = ptr;
+                i = pos;
+            }
             typedef typename std::iterator<std::input_iterator_tag, T, int64_t>::pointer pointer;
             typedef typename std::iterator<std::input_iterator_tag, T, int64_t>::reference reference;
             typedef typename std::iterator<std::input_iterator_tag, T, int64_t>::difference_type difference_type;
             
-            reference operator*() const { return p[i]; }
+            reference operator*() const {
+                return p[i];
+            }
 
-            pointer operator->() const { return &p[i]; }
+            pointer operator->() const {
+                return &p[i];
+            }
 
             MyIterator& operator++() {
                 ++i;
@@ -52,18 +64,26 @@ public:
                 return *this;
             }
 
-            MyIterator operator++(int) { return MyIterator(p, i++); }
+            MyIterator operator++(int) {
+                return MyIterator(p, i++);
+            }
 
-            MyIterator operator--(int) { return MyIterator(p, i--); }
+            MyIterator operator--(int) { 
+                return MyIterator(p, i--);
+            }
 
-            MyIterator operator+(const difference_type& n) const { return MyIterator(p, (i + n)); }
+            MyIterator operator+(const difference_type& n) const {
+                return MyIterator(p, (i + n));
+            }
 
             MyIterator& operator+=(const difference_type& n) {
                 i += n;
                 return *this;
             }
 
-            MyIterator operator-(const difference_type& n) const { return MyIterator(p, (i - n)); }
+            MyIterator operator-(const difference_type& n) const {
+                return MyIterator(p, (i - n));
+            }
 
             MyIterator& operator-=(const difference_type& n) {
                 i -= n;
@@ -84,9 +104,13 @@ public:
 
             bool operator>=(const MyIterator& other) const { return !(*this < other); }
 
-            difference_type operator+(const MyIterator& other) const { return i + other.i; }
+            difference_type operator+(const MyIterator& other) const {
+                return i + other.i;
+            }
 
-            difference_type operator-(const MyIterator& other) const { return i - other.i; }
+            difference_type operator-(const MyIterator& other) const {
+                return i - other.i; 
+            }
     };
         
     Vector(size_t n, T value){
@@ -102,7 +126,7 @@ public:
     }
 
     Vector(size_t n){
-        ptr = (T*)malloc(n*sizeof(T));
+        ptr = (T*)calloc(n, sizeof(T));
         if(!ptr)
             throw std::runtime_error("need memory");
         size_ = n;
@@ -162,29 +186,45 @@ public:
         if(count > capacity_)
             reserve(count);
         if(have_val)
-            for(int i = size; i < count; ++i)
+            for(size_t i = size(); i < count; ++i)
                 ptr[i] = default_val;
         size_ = count;
         return;
     }
 
-    bool empty(){ return size_ == 0; }
+    bool empty(){
+        return size_ == 0;
+    }
 
-    size_t size(){ return size_; }
+    size_t size(){
+        return size_;
+    }
 
-    void clear(){ size_ = 0; }
+    void clear(){
+        size_ = 0;
+    }
 
-    size_t capacity(){ return capacity_; }
+    size_t capacity(){
+        return capacity_;
+    }
 
-    MyIterator begin() { return MyIterator(ptr, 0); }
+    MyIterator begin() {
+        return MyIterator(ptr, 0);
+    }
 
-    MyIterator end() { return MyIterator(ptr, size_); }
+    MyIterator end() {
+        return MyIterator(ptr, size_);
+    }
 
     using reverse_iterator = std::reverse_iterator<MyIterator>;
 
-    reverse_iterator rbegin(){ return makes_reverse_iterator(end()); }
+    reverse_iterator rbegin(){
+        return makes_reverse_iterator(end());
+    }
 
-    reverse_iterator rend(){ return makes_reverse_iterator(begin()); }
+    reverse_iterator rend(){
+        return makes_reverse_iterator(begin());
+    }
 };
 
 template<class T>

@@ -1,5 +1,5 @@
 CC=g++
-FLAGS=-std=c++11 -Wall -Wextra -Wreorder
+FLAGS=-std=c++17 -Wall -Wextra
 
 all: main.o
 	$(CC) $(FLAGS) main.o -o main
@@ -7,7 +7,8 @@ all: main.o
 main.o: main.cpp
 	$(CC) $(FLAGS) main.cpp -c
 
-test:
+test: main.o
+	$(CC) $(FLAGS) main.o -o main
 	./main
 
 clean:
