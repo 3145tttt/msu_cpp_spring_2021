@@ -120,8 +120,7 @@ void Test4(){
 }
 
 int main(){
-    
-	Test1();	
+    Test1();	
     Test2();
     Test3();
     Test4();
