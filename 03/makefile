@@ -4,10 +4,10 @@ FLAGS=-std=c++17 -Wall -Wextra
 all: main.o matrix.o
 	$(CC) $(FLAGS) main.o matrix.o -o main
 	
-main.o: main.cpp
+main.o:
 	$(CC) $(FLAGS) main.cpp -c
 
-matrix.o: matrix.hpp matrix.cpp
+matrix.o:
 	$(CC) $(FLAGS) matrix.cpp -c
 
 test: main.o matrix.o
@@ -15,5 +15,5 @@ test: main.o matrix.o
 	./test
 
 clean:
-	rm -f *.o main
+	rm -f *.o main test
 

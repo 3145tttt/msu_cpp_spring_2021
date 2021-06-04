@@ -2,72 +2,31 @@
 #include <cassert>
 #include "matrix.hpp"
 
-std::ostream& operator<< (std::ostream &out, const Matrix &matrix) {
-    size_t m = matrix.getRowSize(), n = matrix.getColumnSize();
-
-    for(size_t i = 0; i < m; ++i, out << std::endl)
-            for(size_t j = 0; j < n; ++j)
-                out << matrix.getValue(i, j) << " ";
-
-    return out;
-}
-
-bool operator== (const Matrix &matrix1, const Matrix &matrix2){
-    size_t m = matrix1.getRowSize(), n = matrix1.getColumnSize();
-
-    if(m != matrix2.getRowSize() || n != matrix2.getColumnSize())
-        return false;
-
-    bool f = true;
-
-    for(size_t i = 0; f && i < m; ++i)
-        for(size_t j = 0; f && j < n; ++j)
-            f = matrix1.getValue(i, j) == matrix2.getValue(i, j);
-
-    return f;
-}
-
-bool operator!= (const Matrix &matrix1, const Matrix &matrix2){
-    return !(matrix1 == matrix2);
-}
-
-Matrix operator+(const Matrix &matrix1, const Matrix &matrix2){
-    size_t m = matrix1.getRowSize(), n = matrix1.getColumnSize();
-
-    if(m != matrix2.getRowSize() || n != matrix2.getColumnSize())
-        throw std::out_of_range("");
-
-    Matrix ans(m, n);
-
-    for(size_t i = 0; i < m; ++i)
-        for(size_t j = 0; j < n; ++j)
-            ans[i][j] = matrix1.getValue(i, j) + matrix2.getValue(i, j);
-
-    return ans;
-}
-
 void StandartTest(){
 	Matrix m(3, 3);
-	for(int i = 0; i < 3; ++i)
-		for(int j = 0; j < 3; ++j)
+	for(size_t i = 0; i < 3; ++i)
+		for(size_t j = 0; j < 3; ++j)
 			m[i][j] = 3*i + j;
 
 	assert(m.getRowSize() == 3 && m.getColumnSize() == 3);
-	assert(m[1][1] == 4);
+	for(size_t i = 0; i < 3; ++i)
+		for(int j = 0; j < 3; ++j)
+			assert(m[i][j] == 3*i + j);
 	
 	m *= 3;
 	
-	//std::cout << m << std::endl; //for cout test
-	
-	assert(m[1][1] = 12);
-
+	for(size_t i = 0; i < 3; ++i)
+		for(size_t j = 0; j < 3; ++j)
+			assert(m[i][j] == 9*i + 3*j);
 	Matrix I(3, 3);
-	for(int i = 0; i < 3; ++i)
+	for(size_t i = 0; i < 3; ++i)
 		I[i][i] = 1;
 
 	Matrix ans = I + m;
 	assert(I != ans);
-	assert(ans[0][0] == 1);	
+	for(size_t i = 0; i < 3; ++i)
+		for(size_t j = 0; j < 3; ++j)
+			assert(ans[i][j] == (9*i + 3*j + (i == j)));
 }
 
 void BooleanTest(){
@@ -94,12 +53,31 @@ void OutRangeTest(){
 	assert(f);
 }
 
+void Test1(){
+	Matrix m(1, 1);
+	m[0][0] = 100;
+	assert(m.getValue(0, 0) == 100);
+	m *= 100;
+	assert(m.getValue(0, 0) == 10000);
+}
+
+void coutTest(){
+	Matrix m(3, 3);
+	for(size_t i = 0; i < 3; ++i)
+		for(size_t j = 0; j < 3; ++j)
+			m[i][j] = i + j;
+	m *= 10;
+	std::cout << "this is my <<" << std::endl;
+	std::cout << m;
+}
+
 int main(){
 	
 	StandartTest();
 	BooleanTest();	
 	OutRangeTest();	
-
+	Test1();
+	coutTest();
 	return 0;
 }
-//Матрица заполняется по умолчанию нулями для удобства
+

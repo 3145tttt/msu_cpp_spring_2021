@@ -54,7 +54,40 @@ int32_t Matrix::getValue(size_t i, size_t j) const {
 Matrix::~Matrix(){
     delete[] rows_;
 }
-/*
+
+bool Matrix::operator== (const Matrix &matrix2){
+    size_t m = rowSize, n = columnSize;
+
+    if(m != matrix2.getRowSize() || n != matrix2.getColumnSize())
+        return false;
+
+    bool f = true;
+
+    for(size_t i = 0; f && i < m; ++i)
+        for(size_t j = 0; f && j < n; ++j)
+            f = getValue(i, j) == matrix2.getValue(i, j);
+
+    return f;
+}
+
+bool Matrix::operator!= (const Matrix &matrix2){
+    return !(*this == matrix2);
+}
+
+Matrix Matrix::operator+(const Matrix &matrix2){
+    size_t m = rowSize, n = columnSize;
+
+    if(m != matrix2.getRowSize() || n != matrix2.getColumnSize())
+        throw std::out_of_range("");
+
+    Matrix ans(m, n);
+
+    for(size_t i = 0; i < m; ++i)
+        for(size_t j = 0; j < n; ++j)
+            ans[i][j] = getValue(i, j) + matrix2.getValue(i, j);
+
+    return ans;
+}
 
 std::ostream& operator<< (std::ostream &out, const Matrix &matrix) {
     size_t m = matrix.getRowSize(), n = matrix.getColumnSize();
@@ -65,38 +98,3 @@ std::ostream& operator<< (std::ostream &out, const Matrix &matrix) {
 
     return out;
 }
-
-bool operator== (const Matrix &matrix1, const Matrix &matrix2){
-    size_t m = matrix1.getRowSize(), n = matrix1.getColumnSize();
-
-    if(m != matrix2.getRowSize() || n != matrix2.getColumnSize())
-        return false;
-
-    bool f = true;
-
-    for(size_t i = 0; f && i < m; ++i)
-        for(size_t j = 0; f && j < n; ++j)
-            f = matrix1.getValue(i, j) == matrix2.getValue(i, j);
-
-    return f;
-}
-
-bool operator!= (const Matrix &matrix1, const Matrix &matrix2){
-    return !(matrix1 == matrix2);
-}
-
-Matrix operator+(const Matrix &matrix1, const Matrix &matrix2){
-    size_t m = matrix1.getRowSize(), n = matrix1.getColumnSize();
-
-    if(m != matrix2.getRowSize() || n != matrix2.getColumnSize())
-        throw std::out_of_range("");
-
-    Matrix ans(m, n);
-
-    for(size_t i = 0; i < m; ++i)
-        for(size_t j = 0; j < n; ++j)
-            ans[i][j] = matrix1.getValue(i, j) + matrix2.getValue(i, j);
-
-    return ans;
-}
-*/

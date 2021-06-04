@@ -30,8 +30,15 @@ public:
 
     int32_t getValue(size_t i, size_t j) const;
 
-    ~Matrix();
+    friend std::ostream& operator<< (std::ostream &out, const Matrix &matrix);
 
+    bool operator== (const Matrix &matrix2);
+
+    bool operator!= (const Matrix &matrix2);
+
+    Matrix operator+(const Matrix &matrix2);
+
+    ~Matrix();
 
 private:
     ProxyRow *rows_;
