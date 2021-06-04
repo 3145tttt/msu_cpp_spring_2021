@@ -96,6 +96,13 @@ void interestingTest4(){
     assert(c == BigInt("0"));
 }
 
+void interestingTest5(){
+    BigInt a("9999");
+    BigInt b("1");
+    BigInt c = a + b;
+    assert(c == BigInt("10000"));
+}
+
 
 int main(){
     StandartTest();
@@ -108,5 +115,6 @@ int main(){
     interestingTest2();
     interestingTest3();
     interestingTest4();
+    interestingTest5();
     return 0;
 }
