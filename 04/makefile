@@ -4,10 +4,10 @@ FLAGS=-std=c++17 -Wall -Wextra
 all: main.o bigint.o
 	$(CC) $(FLAGS) main.o bigint.o -o main
 	
-main.o: main.cpp
+main.o:
 	$(CC) $(FLAGS) main.cpp -c
 
-bigint.o: bigint.hpp bigint.cpp
+bigint.o:
 	$(CC) $(FLAGS) bigint.cpp -c
 
 test: main.o bigint.o
@@ -15,4 +15,4 @@ test: main.o bigint.o
 	./test
 
 clean:
-	rm -f *.o main
+	rm -f *.o main test

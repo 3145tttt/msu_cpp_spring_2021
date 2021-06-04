@@ -60,11 +60,53 @@ void HomeWorkTest(){
     assert(a == BigInt("246913578024691357802469135782"));
 }
 
+void Test1(){
+    BigInt A(42);
+    BigInt B = std::move(A);
+    assert(B == 42);
+    assert(A.empty());
+}
+
+void interestingTest1(){
+    BigInt a = 99999;
+    BigInt b("99900");
+    BigInt c = a  - b;
+    assert(c == BigInt("99"));
+}
+
+void interestingTest2(){
+    BigInt a = 4;
+    BigInt b("-25");
+    BigInt c = a*b;
+    assert(c == BigInt("-100"));
+}
+
+
+void interestingTest3(){
+    BigInt a("4000000000000000000000001");
+    BigInt b("-1");
+    BigInt c = a*b;
+    assert(c == BigInt("-4000000000000000000000001"));
+}
+
+void interestingTest4(){
+    BigInt a("4000000000000000000000001");
+    BigInt b("0");
+    BigInt c = a*b;
+    assert(c == BigInt("0"));
+}
+
+
 int main(){
     StandartTest();
     BoolTest();
     NegativeTest();
     BigTest();
     HomeWorkTest();
+    Test1();
+    interestingTest1();
+    interestingTest2();
+    interestingTest3();
+    interestingTest4();
     return 0;
 }
