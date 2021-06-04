@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include <sstream>
 
@@ -16,10 +17,12 @@ void getVectorData(std::vector<std::string>& data, T& value, Args&&... args) {
     getVectorData(data, std::forward<Args>(args)...);
 }
 
+std::string format(std::string source){
+    return source;
+}
+
 template<class... Args>
 std::string format(std::string source, Args&&... args) {
-
-
     struct formatVal{
         size_t start;
         size_t end;
@@ -35,7 +38,7 @@ std::string format(std::string source, Args&&... args) {
             t.end = i;
             t.value = value;
             if(t.end - t.start == 1)
-                throw std::runtime_error("{_} must have number");
+                throw std::logic_error("{_} must have number");
             isNumber = false;
             --count;
             formatingValues.push_back(t);
@@ -44,7 +47,7 @@ std::string format(std::string source, Args&&... args) {
             value*= 10;
             size_t x = source[i] - '0';
             if(x > 9)
-                throw std::runtime_error("Finding character in context isn't number");
+                throw std::logic_error("Finding character in context isn't number");
             value+= x;
         }
         if(source[i] == '{'){
@@ -54,7 +57,7 @@ std::string format(std::string source, Args&&... args) {
             ++count;
         }
         if(count > 1)
-            throw std::runtime_error("} so much");
+            throw std::logic_error("} so much");
     }
 
     size_t maxValue = 0;
@@ -69,7 +72,7 @@ std::string format(std::string source, Args&&... args) {
     size_t n = data.size();
 
     if(maxValue >= n)
-        throw std::runtime_error("Format number very big");
+        throw std::logic_error("Format number very big");
 
     std::string res = "";
     for(size_t i = 0, j = 0; i < len; ++i){
