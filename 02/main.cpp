@@ -1,130 +1,130 @@
 #include <iostream>
-#include "tokenParser.hpp"
 #include <cassert>
+#include <vector>
+#include <string>
+#include <functional>
+#include "tokenParser.hpp"
 
-std::string testStr = "";
-unsigned long long testDigit = 0;
-int startCounter = 0;
-int endCounter = 0;
+void Test1(){
+    std::string str;
+	std::vector<uint64_t> Digits;
+	std::vector<std::string> Strings;
 
-void printS(){
-	static int i = 1;
-	startCounter = i++;
-}
+	TokenParser TokenParser;
+	TokenParser.SetStartCallback([&str](){str += "S";});
+	TokenParser.SetEndCallback([&str](){str += "E";});
+	TokenParser.SetDigitTokenCallback([&Digits](uint64_t digitToken) {
+	    Digits.push_back(digitToken);
+	});
+	TokenParser.SetStringTokenCallback([&Strings](std::string stringToken) {
+	    Strings.push_back(stringToken);
+	});
 
-void printF(){
-	static int i = 1;
-	endCounter = i++;
-}
+	TokenParser.StartParsing("I love 899 apples and 9213 banans   \
+			2+2=5     \
+			oh -1231");
 
-void printStr(std::string s){
-	static int i = 1;
-	testStr = s + std::to_string(i++);
-}
+	std::vector<uint64_t> DigitAns = {899, 9213};
+	std::vector<std::string> StrAns = { "I", "love", "apples", "and", "banans", "2+2=5", "oh", "-1231" };
+	assert(str == "SE");
 
-void printDigit(unsigned long long x){
-	static int i = 1;
-	testDigit = x + i++;
-}
-
-void reset(){
-	testStr = "";
-	testDigit = 0;
-	startCounter = 0;
-	endCounter = 0;
-	
-}
-
-void standartTest(){
-	std::string s = "hello 67friend i like 9 apple\n";
-	TokenParser my_parser;
-    my_parser.SetStartCallback(printS);
-    my_parser.SetEndCallback(printF);
-    my_parser.SetDigitTokenCallback(printDigit);
-    my_parser.SetStringTokenCallback(printStr);
-	my_parser.StartParsing(s);
-	
-	assert(startCounter == 1 && endCounter == 1);
-	assert(testStr == "apple5" && testDigit == 10);
-
-	reset();
-}
-
-void withoutCallbackTest1(){
-    std::string s = "hello 67friend i like 9 apple\n";
-    TokenParser my_parser;
-    my_parser.SetDigitTokenCallback(printDigit);
-    my_parser.SetStringTokenCallback(printStr);
-    my_parser.StartParsing(s);
-
-    assert(startCounter == 0 && endCounter == 0);
-    assert(testStr == "apple10" && testDigit == 11);
-
-    reset();
-}
-
-void withoutCallbackTest2(){
-    std::string s = "hello 67friend i like 9 apple\n";
-    TokenParser my_parser;
-    my_parser.SetStartCallback(printS);
-    my_parser.SetEndCallback(printF);
-    my_parser.StartParsing(s);
-
-    assert(startCounter == 2 && endCounter == 2);
-    assert(testStr == "" && testDigit == 0);
-
-    reset();
-}
-
-void repeatTest(){
-    std::string s = "hello 67friend i like 9 apple\n";
-    TokenParser my_parser;
-    my_parser.SetStartCallback(printS);
-    my_parser.SetEndCallback(printF);
-    my_parser.StartParsing(s);
-	my_parser.StartParsing(s);
-    assert(startCounter == 4 && endCounter == 4);
-    assert(testStr == "" && testDigit == 0);
-
-    reset();
-}
-
-void spaceTest(){
-    std::string s = "hello   \t \t\n 67friend    i   like \t\n9 apple\n";
-    TokenParser my_parser;
-    my_parser.SetStartCallback(printS);
-    my_parser.SetEndCallback(printF);
-    my_parser.SetDigitTokenCallback(printDigit);
-    my_parser.SetStringTokenCallback(printStr);
-    my_parser.StartParsing(s);
-
-    assert(startCounter == 5 && endCounter == 5);
-    assert(testStr == "apple15" && testDigit == 12);
-
-    reset();
-}
-
-void numberTest(){
-	std::string s = "2334 200000000000000000000";
-	TokenParser my_parser;
-	my_parser.SetDigitTokenCallback(printDigit);
-    my_parser.SetStringTokenCallback(printStr);
-    my_parser.StartParsing(s);
-	
-    assert(startCounter == 0 && endCounter == 0);
-    assert(testStr == "20000000000000000000016" && testDigit == 2338);
-		
-}
-
-int main()
-{
+    for(size_t i = 0; i < Digits.size(); ++i)
+        assert(Digits[i] == DigitAns[i]);
     
-	standartTest();
-	withoutCallbackTest1();
-	withoutCallbackTest2();
-	repeatTest();
-	spaceTest();
-	numberTest();	
+    for(size_t i = 0; i < Strings.size(); ++i)
+        assert(Strings[i] == StrAns[i]);
+    assert(Digits.size() == DigitAns.size());
+    assert(Strings.size() == StrAns.size());
+}
+
+
+void Test2(){
+    std::string str;
+	std::vector<uint64_t> Digits;
+	std::vector<std::string> Strings;
+
+	TokenParser TokenParser;
+	TokenParser.SetEndCallback([&str](){str += "E";});
+	TokenParser.SetDigitTokenCallback([&Digits](uint64_t digitToken) {
+	    Digits.push_back(digitToken);
+	});
+	TokenParser.SetStringTokenCallback([&Strings](std::string stringToken) {
+	    Strings.push_back(stringToken);
+	});
+
+	TokenParser.StartParsing("I love 43 \t \t \t \n         apples -1231");
+
+    assert(str == "E");
+	std::vector<uint64_t> DigitAns = {43};
+	std::vector<std::string> StrAns = { "I", "love", "apples", "-1231" };
+	
+    for(size_t i = 0; i < Digits.size(); ++i)
+        assert(Digits[i] == DigitAns[i]);
+    
+    for(size_t i = 0; i < Strings.size(); ++i)
+        assert(Strings[i] == StrAns[i]);
+
+    assert(Digits.size() == DigitAns.size());
+    assert(Strings.size() == StrAns.size());
+}
+
+void Test3(){
+	std::vector<uint64_t> Digits;
+	std::vector<std::string> Strings;
+
+	TokenParser TokenParser;
+	TokenParser.SetDigitTokenCallback([&Digits](uint64_t digitToken) {
+	    Digits.push_back(digitToken);
+	});
+	TokenParser.SetStringTokenCallback([&Strings](std::string stringToken) {
+	    Strings.push_back(stringToken);
+	});
+
+	TokenParser.StartParsing("99123");
+	std::vector<uint64_t> DigitAns = {99123};
+	std::vector<std::string> StrAns = { };
+	
+    for(size_t i = 0; i < Digits.size(); ++i)
+        assert(Digits[i] == DigitAns[i]);
+    
+    for(size_t i = 0; i < Strings.size(); ++i)
+        assert(Strings[i] == StrAns[i]);
+
+    assert(Digits.size() == DigitAns.size());
+    assert(Strings.size() == StrAns.size());
+}
+
+void Test4(){
+	std::vector<uint64_t> Digits;
+	std::vector<std::string> Strings;
+
+	TokenParser TokenParser;
+	TokenParser.SetDigitTokenCallback([&Digits](uint64_t digitToken) {
+	    Digits.push_back(digitToken);
+	});
+	TokenParser.SetStringTokenCallback([&Strings](std::string stringToken) {
+	    Strings.push_back(stringToken);
+	});
+
+	TokenParser.StartParsing("9999999999999999999123");
+	std::vector<uint64_t> DigitAns = {};
+	std::vector<std::string> StrAns = {"9999999999999999999123"};
+
+    for(size_t i = 0; i < Digits.size(); ++i)
+        assert(Digits[i] == DigitAns[i]);
+    for(size_t i = 0; i < Strings.size(); ++i)
+        assert(Strings[i] == StrAns[i]);
+
+    assert(Digits.size() == DigitAns.size());
+    assert(Strings.size() == StrAns.size());
+}
+
+int main(){
+    
+	Test1();	
+    Test2();
+    Test3();
+    Test4();
 
 	return 0;
 }	

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 #include <functional>
 
@@ -10,7 +9,7 @@ private:
         return c == ' ' || c == '\t' || c == '\n';
     }
 
-    void tokenF(bool isDigit, std::string s, unsigned long long x) {
+    void tokenF(bool isDigit, std::string s, uint64_t x) {
         if(isDigit && digitF)
             digitF(x);
         else if(stringF)
@@ -21,7 +20,7 @@ private:
 
     std::function<void()> endF;
 
-    std::function<void(unsigned long long)> digitF;
+    std::function<void(uint64_t)> digitF;
 
     std::function<void(std::string)> stringF;
 
@@ -36,7 +35,7 @@ public:
         endF =  t;
     }
 
-    void SetDigitTokenCallback(std::function<void(unsigned long long)> t = nullptr){
+    void SetDigitTokenCallback(std::function<void(uint64_t)> t = nullptr){
         digitF =  t;
     }
 

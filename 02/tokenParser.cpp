@@ -1,14 +1,14 @@
 #include "tokenParser.hpp"
 
 void TokenParser::StartParsing(const std::string s) {
-    int n = s.size();
-	unsigned long long value = 0;
-	const unsigned long long max = 0xFFFFFFFFFFFFFFFF;
+    size_t n = s.size();
+	uint64_t value = 0;
+	const uint64_t max = 0xFFFFFFFFFFFFFFFF;
     bool isDigit = true;
     std::string token = "";
     if(startF)
 		startF();
-    for(int i = 0; i < n; ++i){
+    for(size_t i = 0; i < n; ++i){
         if(spaceChar(s[i])){
 	        tokenF(isDigit, token, value);
 			isDigit = true;
