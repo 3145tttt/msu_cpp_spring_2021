@@ -4,7 +4,7 @@ FLAGS=-std=c++17 -Wall -Wextra
 all: main.o
 	$(CC) $(FLAGS) main.o -o main
 	
-main.o: main.cpp errors.hpp serializer.tpp serializer.hpp deserializer.hpp deserializer.tpp
+main.o:
 	$(CC) $(FLAGS) main.cpp -c
 
 test: main.o
@@ -12,4 +12,4 @@ test: main.o
 	./test
 
 clean:
-	rm -f *.o main
+	rm -f *.o main test

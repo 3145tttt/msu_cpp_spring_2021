@@ -1,3 +1,4 @@
+#pragma once
 template <class T>
 Error Serializer::save(T& object){       
     return object.serialize(*this);

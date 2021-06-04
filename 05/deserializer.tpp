@@ -1,3 +1,4 @@
+#pragma once
 template <class T>
 Error Deserializer::load(T& object){
     return object.serialize(*this);
@@ -21,7 +22,7 @@ Error Deserializer::process(T& value){
     bool is_bool = std::is_same<bool, T>::value;
     bool is_uint64_t = std::is_same<uint64_t, T>::value;
     if(!(is_bool || is_uint64_t))
-        return Error::DiffrentType;
+        return Error::CorruptedArchive;
     std::string text;
     in_ >> text;
     if (text.empty())
